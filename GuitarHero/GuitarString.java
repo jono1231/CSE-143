@@ -3,7 +3,7 @@
  * Jonathan Wang
  * 13 October 2022
  * CSE 143 AJ
- * A GuitarString emulates a guitar vibrating at a specific frequency
+ * A GuitarString emulates a guitar string vibrating at a specific frequency
 */
 import java.util.*;
 
@@ -12,6 +12,7 @@ public class GuitarString {
     public static final double ENERGY_DECAY_FACTOR = 0.996; // Energy decay factor
     private Queue<Double> ringBuffer; // Ring Buffer for storing Karplus-Strong Algorithm
     private int sampleSize; // Sample size for the Ring Buffer
+    private Random randomGenerator;
 
     /*
      * Constructor:
@@ -29,6 +30,7 @@ public class GuitarString {
         }
 
         ringBuffer = new LinkedList<>();
+        randomGenerator = new Random();
 
         for (int i = 0; i < sampleSize; i++) {
             ringBuffer.add(0.0);
@@ -63,8 +65,8 @@ public class GuitarString {
      */
     public void pluck() {
         for (int i = 0; i < sampleSize; i++) {
+            double random = randomGenerator.nextDouble() - 0.5;
             ringBuffer.remove();
-            double random = Math.random() - 0.5;
             ringBuffer.add(random);
         }
     }

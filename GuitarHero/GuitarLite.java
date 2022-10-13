@@ -8,7 +8,7 @@ public class GuitarLite implements Guitar {
     // create two guitar strings, for concert A and C
     public GuitarLite() {
         double concertA = 440.0;
-        double concertC = concertA * Math.pow(2, 3.0/12.0);  
+        double concertC = concertA * Math.pow(2, 3.0 / 12.0);
         stringA = new GuitarString(concertA);
         stringC = new GuitarString(concertC);
     }
@@ -24,7 +24,7 @@ public class GuitarLite implements Guitar {
     public boolean hasString(char string) {
         return (string == 'a' || string == 'c');
     }
-    
+
     public void pluck(char string) {
         if (string == 'a') {
             stringA.pluck();
@@ -43,6 +43,6 @@ public class GuitarLite implements Guitar {
     }
 
     public int time() {
-        return -1;  // not implemented
+        return -1; // not implemented
     }
 }

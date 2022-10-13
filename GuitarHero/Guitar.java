@@ -9,12 +9,16 @@
 // determining the current time (the number of times tic has been called).  If
 // the time method is not implemented, it returns -1.
 
-
 public interface Guitar {
     public void playNote(int pitch);
+
     public boolean hasString(char key);
+
     public void pluck(char key);
+
     public double sample();
+
     public void tic();
+
     public int time();
 }
