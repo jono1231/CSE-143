@@ -3,7 +3,7 @@
  * CSE 143 AJ
  * 27 October 2022
  * A Hangman Manager creates a game of hangman where 
- * the game tries to make the player fail
+ * the game tries to make the player lose
  */
 
 import java.util.*;
@@ -40,9 +40,8 @@ public class HangmanManager {
      * set of words is nonempty (Throws IllegalStateException otherwise)
      * Character has not been guessed (Throws IllegalArgumentException otherwise)
      * Post: Guesses a character, creating a pattern based on the number of words
-     * appearing
-     * then returns the number of times that the character appears in the resulting
-     * pattern.
+     * appearing then returns the number of
+     * times that the character appears in the resulting pattern.
      */
     public int record(char guess) {
         if (guessesLeft() < 1) {
@@ -56,21 +55,12 @@ public class HangmanManager {
         }
 
         Map<String, Set<String>> patterns = getPatternsMap(guess);
-        String pattern = ""; // If words is unemtpy, pattern is guarenteed not "" after next loop
-        int max = 0;
-
-        for (String p : patterns.keySet()) {
-            int size = patterns.get(p).size();
-            if (size > max) {
-                max = size;
-                pattern = p;
-            }
-        }
+        String pattern = getLargestPattern(patterns);
 
         words = patterns.get(pattern);
         chars.add(guess);
-        guesses--;
         curPattern = pattern;
+
         return getCharOccurrences(pattern, guess);
     }
 
@@ -83,7 +73,7 @@ public class HangmanManager {
     }
 
     /*
-     * Post: Returns the number of guesses left by the player
+     * Post: Returns the number of wrong guesses the player can still make
      */
     public int guessesLeft() {
         return guesses;
@@ -142,8 +132,8 @@ public class HangmanManager {
 
     /*
      * Post: takes a character ch and word word and creates a pattern
-     * that corresponds to that pattern, merging that pattern with the
-     * current pattern
+     * that corresponds to that character
+     * , merging it with the current pattern
      */
     private String getPattern(String s, char guess) {
         int patternIndex = 0;
@@ -153,24 +143,20 @@ public class HangmanManager {
             char curChar = s.charAt(i);
             if (curChar == guess) {
                 pattern += guess + " ";
+            } else if (curPattern.charAt(patternIndex) != '-') {
+                pattern += curPattern.charAt(patternIndex) + " ";
             } else {
-                if (curPattern.charAt(patternIndex) != '-') {
-                    pattern += curPattern.charAt(patternIndex) + " ";
-                } else {
-                    pattern += "- ";
-                }
+                pattern += "- ";
             }
             patternIndex += 2;
         }
 
         if (s.charAt(s.length() - 1) == guess) {
             pattern += guess + " ";
+        } else if (curPattern.charAt(patternIndex) != '-') {
+            pattern += curPattern.charAt(patternIndex);
         } else {
-            if (curPattern.charAt(patternIndex) != '-') {
-                pattern += curPattern.charAt(patternIndex);
-            } else {
-                pattern += "-";
-            }
+            pattern += "-";
         }
 
         return pattern;
@@ -178,6 +164,7 @@ public class HangmanManager {
 
     /*
      * Post: returns the number of times the character appears in the String
+     * Updates guesses if the number of character occurrences is 0
      */
     private int getCharOccurrences(String str, char ch) {
         int ret = 0;
@@ -186,6 +173,29 @@ public class HangmanManager {
                 ret++;
             }
         }
+
+        if (ret == 0) {
+            guesses--;
+        }
+
         return ret;
+    }
+
+    /*
+     * Post: Returns the pattern string with the most occurrences in patterns.
+     */
+    private String getLargestPattern(Map<String, Set<String>> patterns) {
+        int max = 0;
+        String pattern = "";
+
+        for (String p : patterns.keySet()) {
+            int size = patterns.get(p).size();
+            if (size > max) {
+                max = size;
+                pattern = p;
+            }
+        }
+
+        return pattern;
     }
 }
