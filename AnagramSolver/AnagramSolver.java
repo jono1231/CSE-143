@@ -1,22 +1,23 @@
-
 /*
  * Jonathan Wang
  * CSE 143 AJ
  * An anagram solver takes a dictionary of words
- * and a phrase and prints all the anagrams of that phrase
+ * and a phrase and prints all the anagram phrases
  */
+
 import java.util.*;
 
 public class AnagramSolver {
     // The dictionary of words and their lettercounts
-    Map<String, LetterInventory> dictionary;
-    List<String> words; // The list of words in the AnagramSolver
-    Stack<String> explore; // The current exploration of the solver
+    private Map<String, LetterInventory> dictionary;
+    private List<String> words; // The words stored in the AnagramSolver
+    private List<String> curExploration; // The current exploration of words
+    private Stack<String> explore; // The current exploration of the solver
 
     /*
      * Constructor:
      * Post: Takes a dictionary and constructs a new AnagramSolver,
-     * mapping each word to it's letter count
+     * matching up all words with their character counts
      */
     public AnagramSolver(List<String> list) {
         words = list;
@@ -38,35 +39,45 @@ public class AnagramSolver {
     public void print(String s, int max) {
         if (max < 0) {
             throw new IllegalArgumentException("Invalid Max: " + max);
+        } else if (max == 0) {
+            max = -1;
         }
         LetterInventory sInv = new LetterInventory(s);
-        printHelper(sInv, max, words);
+        curExploration = prune(sInv);
+        printHelper(sInv, max);
     }
 
     /*
      * Post: Prints anagrams if possible
-     * TODO: Ask TA about if this violates recursion/boolean zen tomorrow.
      */
-    private void printHelper(LetterInventory curInv, int max,
-            List<String> curExplored) {
-        if (curInv.isEmpty() && (max == 0 || explore.size() <= max)) {
+    private void printHelper(LetterInventory curInv, int max) {
+        if (curInv.isEmpty()) {
             System.out.println(explore);
-        } else if (max == 0 || explore.size() < max) {
-            List<String> newExplored = new ArrayList<>();
-            Map<String, LetterInventory> map = new HashMap<>();
-            for (String s : curExplored) {
+        } else if (max != 0) {
+            for (String s : curExploration) {
                 LetterInventory sInv = dictionary.get(s);
                 LetterInventory newInv = curInv.subtract(sInv);
                 if (newInv != null) {
-                    newExplored.add(s);
-                    map.put(s, newInv);
+                    explore.push(s);
+                    printHelper(newInv, max - 1);
+                    explore.pop();
                 }
             }
-            for (String s : newExplored) {
-                explore.push(s);
-                printHelper(map.get(s), max, newExplored);
-                explore.pop();
+        }
+    }
+
+    /*
+     * Post: Takes a word toPrune and prunes all impossible
+     * anagrams from the dictionary
+     */
+    private List<String> prune(LetterInventory toPrune) {
+        List<String> ret = new ArrayList<>();
+        for (String s : words) {
+            LetterInventory dictInv = dictionary.get(s);
+            if (toPrune.subtract(dictInv) != null) {
+                ret.add(s);
             }
         }
+        return ret;
     }
 }
