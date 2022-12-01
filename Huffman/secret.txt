@@ -1,0 +1,3 @@
+import webbrowser
+str = "2268747470733a2f2f7777772e796f75747562652e636f6d2f77617463683f763d645177347739576758635122"
+webbrowser.open(bytes.fromhex(str).decode('utf-8'))

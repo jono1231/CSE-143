@@ -110,10 +110,9 @@ public class QuestionTree {
             String obj = console.nextLine();
             QuestionNode newAnswer = new QuestionNode(obj);
 
-            System.out.print(
-                    "Please give me a yes or no question"
-                            + "\n that distinguishes between your object"
-                            + "\n and mine --> ");
+            System.out.println("Please give me a yes or no question");
+            System.out.println("that distinguishes between your object");
+            System.out.print("and mine --> ");
             String q = console.nextLine();
 
             prompt = "And what is the answer for your object?";
