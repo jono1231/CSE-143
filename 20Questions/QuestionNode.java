@@ -3,7 +3,8 @@
  * CSE 143 AJ
  * November 24, 2022
  * A QuestionNode class is used to store
- * questions and their answers.
+ * questions and their answers for the
+ * QuestionTree class
  */
 
 public class QuestionNode {

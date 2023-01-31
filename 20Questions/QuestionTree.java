@@ -98,8 +98,10 @@ public class QuestionTree {
     }
 
     /*
-     * Checks if an answer is correct and if it isn't,
-     * learns.
+     * Checks if an answer is correct and
+     * if it isn't, prompts the user to
+     * add their answer and distinguishing
+     * question.
      */
     private QuestionNode getAnswer(QuestionNode ansNode) {
         String prompt = "Would your object happen to be " + ansNode.data + "?";
@@ -110,9 +112,9 @@ public class QuestionTree {
             String obj = console.nextLine();
             QuestionNode newAnswer = new QuestionNode(obj);
 
-            System.out.println("Please give me a yes or no question");
-            System.out.println("that distinguishes between your object");
-            System.out.print("and mine --> ");
+            System.out.println("Please give me a yes/no question that");
+            System.out.println("distinguishes between your object");
+            System.out.print("and mine--> ");
             String q = console.nextLine();
 
             prompt = "And what is the answer for your object?";

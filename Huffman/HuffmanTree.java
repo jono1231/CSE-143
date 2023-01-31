@@ -2,57 +2,18 @@
 /*
  * Jonathan Wang
  * CSE 143 AJ
+ * 8th December 2022
  * A HuffmanTree class compresses a txt file
- * using the Huffman character frequency 
+ * using Huffman's character frequency 
  * compression algorithm
  */
 import java.util.*;
+
 import java.io.*;
 
 public class HuffmanTree {
 
-    public class HuffmanNode implements Comparable<HuffmanNode> {
-        HuffmanNode zero; // Zero (left) node
-        HuffmanNode one; // One (right) node
-
-        int occurrences; // Character frequency
-        int data; // Character stored in the node
-
-        /*
-         * Constructor: Takes an int occurrences and
-         * a character data and creates a new HuffmanNode,
-         * storing the data and occurences
-         */
-        public HuffmanNode(int occ, int d) {
-            occurrences = occ;
-            data = d;
-
-        }
-
-        /*
-         * Constructor Override:
-         * Takes 2 nodes l and r and creates a new huffman Node,
-         * adding the total number of occurrences and summing up the character data.
-         */
-        public HuffmanNode(HuffmanNode l, HuffmanNode r) {
-            this(l.occurrences + r.occurrences, 0);
-            zero = l;
-            one = r;
-        }
-
-        /*
-         * Compare to: Prioritizes number of occurrences
-         * (returns the difference between the nodes)
-         * otherwise prioritizes character occurrence
-         * in the ascii table
-         * (returns the difference between the two)
-         */
-        public int compareTo(HuffmanNode other) {
-            int diff = occurrences - other.occurrences;
-            return diff;
-        }
-    }
-
+    public final static int END_OF_FILE = 256; // Int storing end of file
     private HuffmanNode root; // Root node to the Huffman tree
 
     public HuffmanTree(int[] counts) {
@@ -63,7 +24,7 @@ public class HuffmanTree {
                 nodes.add(tooAdd);
             }
         }
-        nodes.add(new HuffmanNode(1, 256));
+        nodes.add(new HuffmanNode(1, END_OF_FILE));
 
         while (nodes.size() > 1) {
             HuffmanNode left = nodes.remove();
@@ -114,9 +75,10 @@ public class HuffmanTree {
     }
 
     /*
-     * Post: outputs the current HuffmanTree code
-     * into a output .code file with binary tree
-     * encoding
+     * Post: outputs the current HuffmanTree
+     * into a output .code file, recording where
+     * the code is in the tree and what the character
+     * stored there is
      */
     public void write(PrintStream output) {
         writeHelper(root, output, "");
@@ -131,6 +93,13 @@ public class HuffmanTree {
         }
     }
 
+    /*
+     * Post: takes a BitInputStream with the encrypted file,
+     * a output PrintStream, and an int representing an
+     * end of file character and decrypts the file using
+     * the current HuffmanTree, outputting results to the
+     * PrintStream.
+     */
     public void decode(BitInputStream input, PrintStream output, int eof) {
         boolean going = true;
         while (going) {

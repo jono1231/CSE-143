@@ -1,10 +1,10 @@
 Q:
-Can you eat it?
-A:
-candy bar
+Is it an animal?
 Q:
-Does it require electricity?
+Does it hop?
+A:
+frog
+A:
+dog
 A:
 computer
-A:
-piece of paper
